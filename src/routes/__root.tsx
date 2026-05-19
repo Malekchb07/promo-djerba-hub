@@ -11,6 +11,9 @@ import {
 import appCss from "../styles.css?url";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
+import { AuthProvider } from "@/hooks/use-auth";
+import { useRouterState } from "@tanstack/react-router";
+import { Toaster } from "sonner";
 
 function NotFoundComponent() {
   return (
@@ -89,13 +92,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = path.startsWith("/admin");
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex flex-col bg-background">
-        <Header />
-        <main className="flex-1"><Outlet /></main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <div className="min-h-screen flex flex-col bg-background">
+          {!isAdmin && <Header />}
+          <main className="flex-1"><Outlet /></main>
+          {!isAdmin && <Footer />}
+          <Toaster theme="dark" position="top-right" />
+        </div>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

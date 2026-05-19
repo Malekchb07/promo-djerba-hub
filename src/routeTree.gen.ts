@@ -13,10 +13,19 @@ import { Route as StoresRouteImport } from './routes/stores'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PromotionsRouteImport } from './routes/promotions'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as CouponsRouteImport } from './routes/coupons'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CataloguesRouteImport } from './routes/catalogues'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
+import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminParticipantsRouteImport } from './routes/admin.participants'
+import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
+import { Route as AdminCompetitionsRouteImport } from './routes/admin.competitions'
+import { Route as AdminCataloguesRouteImport } from './routes/admin.catalogues'
 
 const StoresRoute = StoresRouteImport.update({
   id: '/stores',
@@ -38,6 +47,11 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CouponsRoute = CouponsRouteImport.update({
   id: '/coupons',
   path: '/coupons',
@@ -53,81 +67,175 @@ const CataloguesRoute = CataloguesRouteImport.update({
   path: '/catalogues',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPromotionsRoute = AdminPromotionsRouteImport.update({
+  id: '/promotions',
+  path: '/promotions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProductsRoute = AdminProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminParticipantsRoute = AdminParticipantsRouteImport.update({
+  id: '/participants',
+  path: '/participants',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCouponsRoute = AdminCouponsRouteImport.update({
+  id: '/coupons',
+  path: '/coupons',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCompetitionsRoute = AdminCompetitionsRouteImport.update({
+  id: '/competitions',
+  path: '/competitions',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCataloguesRoute = AdminCataloguesRouteImport.update({
+  id: '/catalogues',
+  path: '/catalogues',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/catalogues': typeof CataloguesRoute
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
+  '/admin/catalogues': typeof AdminCataloguesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
+  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/participants': typeof AdminParticipantsRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/catalogues': typeof CataloguesRoute
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
+  '/admin/catalogues': typeof AdminCataloguesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
+  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/participants': typeof AdminParticipantsRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/catalogues': typeof CataloguesRoute
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
+  '/admin/catalogues': typeof AdminCataloguesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
+  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/participants': typeof AdminParticipantsRoute
+  '/admin/products': typeof AdminProductsRoute
+  '/admin/promotions': typeof AdminPromotionsRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/catalogues'
     | '/contact'
     | '/coupons'
+    | '/login'
     | '/products'
     | '/promotions'
     | '/sitemap.xml'
     | '/stores'
+    | '/admin/catalogues'
+    | '/admin/competitions'
+    | '/admin/coupons'
+    | '/admin/participants'
+    | '/admin/products'
+    | '/admin/promotions'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/catalogues'
     | '/contact'
     | '/coupons'
+    | '/login'
     | '/products'
     | '/promotions'
     | '/sitemap.xml'
     | '/stores'
+    | '/admin/catalogues'
+    | '/admin/competitions'
+    | '/admin/coupons'
+    | '/admin/participants'
+    | '/admin/products'
+    | '/admin/promotions'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/catalogues'
     | '/contact'
     | '/coupons'
+    | '/login'
     | '/products'
     | '/promotions'
     | '/sitemap.xml'
     | '/stores'
+    | '/admin/catalogues'
+    | '/admin/competitions'
+    | '/admin/coupons'
+    | '/admin/participants'
+    | '/admin/products'
+    | '/admin/promotions'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   CataloguesRoute: typeof CataloguesRoute
   ContactRoute: typeof ContactRoute
   CouponsRoute: typeof CouponsRoute
+  LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRoute
   PromotionsRoute: typeof PromotionsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -164,6 +272,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coupons': {
       id: '/coupons'
       path: '/coupons'
@@ -185,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CataloguesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -192,14 +314,87 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/promotions': {
+      id: '/admin/promotions'
+      path: '/promotions'
+      fullPath: '/admin/promotions'
+      preLoaderRoute: typeof AdminPromotionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/products': {
+      id: '/admin/products'
+      path: '/products'
+      fullPath: '/admin/products'
+      preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/participants': {
+      id: '/admin/participants'
+      path: '/participants'
+      fullPath: '/admin/participants'
+      preLoaderRoute: typeof AdminParticipantsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/coupons': {
+      id: '/admin/coupons'
+      path: '/coupons'
+      fullPath: '/admin/coupons'
+      preLoaderRoute: typeof AdminCouponsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/competitions': {
+      id: '/admin/competitions'
+      path: '/competitions'
+      fullPath: '/admin/competitions'
+      preLoaderRoute: typeof AdminCompetitionsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/catalogues': {
+      id: '/admin/catalogues'
+      path: '/catalogues'
+      fullPath: '/admin/catalogues'
+      preLoaderRoute: typeof AdminCataloguesRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminCataloguesRoute: typeof AdminCataloguesRoute
+  AdminCompetitionsRoute: typeof AdminCompetitionsRoute
+  AdminCouponsRoute: typeof AdminCouponsRoute
+  AdminParticipantsRoute: typeof AdminParticipantsRoute
+  AdminProductsRoute: typeof AdminProductsRoute
+  AdminPromotionsRoute: typeof AdminPromotionsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCataloguesRoute: AdminCataloguesRoute,
+  AdminCompetitionsRoute: AdminCompetitionsRoute,
+  AdminCouponsRoute: AdminCouponsRoute,
+  AdminParticipantsRoute: AdminParticipantsRoute,
+  AdminProductsRoute: AdminProductsRoute,
+  AdminPromotionsRoute: AdminPromotionsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   CataloguesRoute: CataloguesRoute,
   ContactRoute: ContactRoute,
   CouponsRoute: CouponsRoute,
+  LoginRoute: LoginRoute,
   ProductsRoute: ProductsRoute,
   PromotionsRoute: PromotionsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,

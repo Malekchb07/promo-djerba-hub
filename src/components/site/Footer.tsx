@@ -40,9 +40,9 @@ export function Footer() {
         <div>
           <h4 className="mb-4 text-xs uppercase tracking-[0.2em] text-gold">Contact</h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2"><MapPin className="h-4 w-4 mt-0.5 text-gold" /> Houmt Souk, Djerba 4180, Tunisie</li>
-            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-gold" /> +216 75 000 000</li>
-            <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-gold" /> contact@promofrais.tn</li>
+            <li className="flex items-start gap-2"><MapPin className="h-4 w-4 mt-0.5 text-gold" /><span>Houmt Souk, Djerba 4180, Tunisie</span></li>
+            <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-gold" /><span>+216 75 000 000</span></li>
+            <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-gold" /><span>contact@promofrais.tn</span></li>
           </ul>
         </div>
       </div>
