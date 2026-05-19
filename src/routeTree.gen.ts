@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WheelRouteImport } from './routes/wheel'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PromotionsRouteImport } from './routes/promotions'
@@ -20,6 +21,7 @@ import { Route as CataloguesRouteImport } from './routes/catalogues'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as CataloguesIdRouteImport } from './routes/catalogues.$id'
 import { Route as AdminPromotionsRouteImport } from './routes/admin.promotions'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminParticipantsRouteImport } from './routes/admin.participants'
@@ -27,6 +29,11 @@ import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCompetitionsRouteImport } from './routes/admin.competitions'
 import { Route as AdminCataloguesRouteImport } from './routes/admin.catalogues'
 
+const WheelRoute = WheelRouteImport.update({
+  id: '/wheel',
+  path: '/wheel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoresRoute = StoresRouteImport.update({
   id: '/stores',
   path: '/stores',
@@ -82,6 +89,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const CataloguesIdRoute = CataloguesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => CataloguesRoute,
+} as any)
 const AdminPromotionsRoute = AdminPromotionsRouteImport.update({
   id: '/promotions',
   path: '/promotions',
@@ -116,7 +128,7 @@ const AdminCataloguesRoute = AdminCataloguesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/catalogues': typeof CataloguesRoute
+  '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
   '/login': typeof LoginRoute
@@ -124,17 +136,19 @@ export interface FileRoutesByFullPath {
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
+  '/wheel': typeof WheelRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/participants': typeof AdminParticipantsRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/catalogues/$id': typeof CataloguesIdRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/catalogues': typeof CataloguesRoute
+  '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
   '/login': typeof LoginRoute
@@ -142,19 +156,21 @@ export interface FileRoutesByTo {
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
+  '/wheel': typeof WheelRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/participants': typeof AdminParticipantsRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/catalogues/$id': typeof CataloguesIdRoute
   '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/catalogues': typeof CataloguesRoute
+  '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
   '/login': typeof LoginRoute
@@ -162,12 +178,14 @@ export interface FileRoutesById {
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
+  '/wheel': typeof WheelRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
   '/admin/participants': typeof AdminParticipantsRoute
   '/admin/products': typeof AdminProductsRoute
   '/admin/promotions': typeof AdminPromotionsRoute
+  '/catalogues/$id': typeof CataloguesIdRoute
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -183,12 +201,14 @@ export interface FileRouteTypes {
     | '/promotions'
     | '/sitemap.xml'
     | '/stores'
+    | '/wheel'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
     | '/admin/participants'
     | '/admin/products'
     | '/admin/promotions'
+    | '/catalogues/$id'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -201,12 +221,14 @@ export interface FileRouteTypes {
     | '/promotions'
     | '/sitemap.xml'
     | '/stores'
+    | '/wheel'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
     | '/admin/participants'
     | '/admin/products'
     | '/admin/promotions'
+    | '/catalogues/$id'
     | '/admin'
   id:
     | '__root__'
@@ -220,19 +242,21 @@ export interface FileRouteTypes {
     | '/promotions'
     | '/sitemap.xml'
     | '/stores'
+    | '/wheel'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
     | '/admin/participants'
     | '/admin/products'
     | '/admin/promotions'
+    | '/catalogues/$id'
     | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
-  CataloguesRoute: typeof CataloguesRoute
+  CataloguesRoute: typeof CataloguesRouteWithChildren
   ContactRoute: typeof ContactRoute
   CouponsRoute: typeof CouponsRoute
   LoginRoute: typeof LoginRoute
@@ -240,10 +264,18 @@ export interface RootRouteChildren {
   PromotionsRoute: typeof PromotionsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StoresRoute: typeof StoresRoute
+  WheelRoute: typeof WheelRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wheel': {
+      id: '/wheel'
+      path: '/wheel'
+      fullPath: '/wheel'
+      preLoaderRoute: typeof WheelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stores': {
       id: '/stores'
       path: '/stores'
@@ -321,6 +353,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/catalogues/$id': {
+      id: '/catalogues/$id'
+      path: '/$id'
+      fullPath: '/catalogues/$id'
+      preLoaderRoute: typeof CataloguesIdRouteImport
+      parentRoute: typeof CataloguesRoute
+    }
     '/admin/promotions': {
       id: '/admin/promotions'
       path: '/promotions'
@@ -388,10 +427,22 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface CataloguesRouteChildren {
+  CataloguesIdRoute: typeof CataloguesIdRoute
+}
+
+const CataloguesRouteChildren: CataloguesRouteChildren = {
+  CataloguesIdRoute: CataloguesIdRoute,
+}
+
+const CataloguesRouteWithChildren = CataloguesRoute._addFileChildren(
+  CataloguesRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
-  CataloguesRoute: CataloguesRoute,
+  CataloguesRoute: CataloguesRouteWithChildren,
   ContactRoute: ContactRoute,
   CouponsRoute: CouponsRoute,
   LoginRoute: LoginRoute,
@@ -399,6 +450,7 @@ const rootRouteChildren: RootRouteChildren = {
   PromotionsRoute: PromotionsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StoresRoute: StoresRoute,
+  WheelRoute: WheelRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
