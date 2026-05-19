@@ -9,7 +9,7 @@ export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — PROMOFRAIS" }, { name: "robots", content: "noindex" }] }),
 });
 
-const NAV = [
+const NAV: { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean }[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/products", label: "Produits", icon: Package },
   { to: "/admin/promotions", label: "Promotions", icon: Tag },
@@ -17,7 +17,7 @@ const NAV = [
   { to: "/admin/competitions", label: "Concours", icon: Trophy },
   { to: "/admin/participants", label: "Participants", icon: Users },
   { to: "/admin/catalogues", label: "Catalogues", icon: FileText },
-] as const;
+];
 
 function AdminLayout() {
   const { user, isAdmin, isLoading, signOut } = useAuth();
