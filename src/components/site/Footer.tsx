@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, Share2, Camera, Play } from "lucide-react";
 import { Logo } from "./Logo";
 
 export function Footer() {
@@ -12,7 +12,7 @@ export function Footer() {
             La référence retail de Djerba. Fraîcheur, qualité et promotions premium chaque semaine.
           </p>
           <div className="flex gap-2">
-            {[Facebook, Instagram, Youtube].map((Icon, i) => (
+            {[Share2, Camera, Play].map((Icon, i) => (
               <a key={i} href="#" className="grid h-9 w-9 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:border-gold/40 hover:text-gold">
                 <Icon className="h-4 w-4" />
               </a>
