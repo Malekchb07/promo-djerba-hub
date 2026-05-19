@@ -1,5 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
-
 export function PageHero({ kicker, title, subtitle }: { kicker: string; title: string; subtitle?: string }) {
   return (
     <section className="relative border-b border-border bg-gradient-hero">
@@ -12,5 +10,3 @@ export function PageHero({ kicker, title, subtitle }: { kicker: string; title: s
     </section>
   );
 }
-
-export const _noop = createFileRoute;
