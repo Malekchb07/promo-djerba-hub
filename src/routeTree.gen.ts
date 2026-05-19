@@ -13,9 +13,11 @@ import { Route as StoresRouteImport } from './routes/stores'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PromotionsRouteImport } from './routes/promotions'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as CouponsRouteImport } from './routes/coupons'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CataloguesRouteImport } from './routes/catalogues'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 
 const StoresRoute = StoresRouteImport.update({
@@ -38,6 +40,11 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CouponsRoute = CouponsRouteImport.update({
   id: '/coupons',
   path: '/coupons',
@@ -53,6 +60,11 @@ const CataloguesRoute = CataloguesRouteImport.update({
   path: '/catalogues',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -61,9 +73,11 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/catalogues': typeof CataloguesRoute
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -71,9 +85,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/catalogues': typeof CataloguesRoute
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -82,9 +98,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/catalogues': typeof CataloguesRoute
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
+  '/login': typeof LoginRoute
   '/products': typeof ProductsRoute
   '/promotions': typeof PromotionsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -94,9 +112,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/catalogues'
     | '/contact'
     | '/coupons'
+    | '/login'
     | '/products'
     | '/promotions'
     | '/sitemap.xml'
@@ -104,9 +124,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/catalogues'
     | '/contact'
     | '/coupons'
+    | '/login'
     | '/products'
     | '/promotions'
     | '/sitemap.xml'
@@ -114,9 +136,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/catalogues'
     | '/contact'
     | '/coupons'
+    | '/login'
     | '/products'
     | '/promotions'
     | '/sitemap.xml'
@@ -125,9 +149,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   CataloguesRoute: typeof CataloguesRoute
   ContactRoute: typeof ContactRoute
   CouponsRoute: typeof CouponsRoute
+  LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRoute
   PromotionsRoute: typeof PromotionsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -164,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/coupons': {
       id: '/coupons'
       path: '/coupons'
@@ -185,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CataloguesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -197,9 +237,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   CataloguesRoute: CataloguesRoute,
   ContactRoute: ContactRoute,
   CouponsRoute: CouponsRoute,
+  LoginRoute: LoginRoute,
   ProductsRoute: ProductsRoute,
   PromotionsRoute: PromotionsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -208,3 +250,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
