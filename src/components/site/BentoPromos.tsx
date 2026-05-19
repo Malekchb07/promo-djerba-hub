@@ -6,17 +6,18 @@ import epicerie from "@/assets/promo-epicerie.jpg";
 import beaute from "@/assets/promo-beaute.jpg";
 
 function useCountdown(targetHours = 36) {
-  const [end] = useState(() => Date.now() + targetHours * 3600 * 1000);
-  const [now, setNow] = useState(Date.now());
+  const [mounted, setMounted] = useState(false);
+  const [end, setEnd] = useState(0);
+  const [now, setNow] = useState(0);
   useEffect(() => {
+    const e = Date.now() + targetHours * 3600 * 1000;
+    setEnd(e); setNow(Date.now()); setMounted(true);
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [targetHours]);
+  if (!mounted) return { h: 0, m: 0, s: 0 };
   const diff = Math.max(0, end - now);
-  const h = Math.floor(diff / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
-  return { h, m, s };
+  return { h: Math.floor(diff / 3600000), m: Math.floor((diff % 3600000) / 60000), s: Math.floor((diff % 60000) / 1000) };
 }
 
 export function BentoPromos() {

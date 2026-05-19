@@ -8,6 +8,7 @@ const NAV = [
   { to: "/promotions", label: "Promotions" },
   { to: "/products", label: "Produits" },
   { to: "/coupons", label: "Coupons" },
+  { to: "/wheel", label: "Roue" },
   { to: "/catalogues", label: "Catalogues" },
   { to: "/stores", label: "Magasins" },
   { to: "/contact", label: "Contact" },
@@ -48,9 +49,9 @@ export function Header() {
             <button className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40">
               <Heart className="h-4 w-4" />
             </button>
-            <button className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40">
+            <Link to="/login" className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40">
               <User className="h-4 w-4" />
-            </button>
+            </Link>
             <button
               onClick={() => setOpen((o) => !o)}
               className="lg:hidden inline-grid h-10 w-10 place-items-center rounded-full border border-border"
