@@ -3,9 +3,12 @@ import { MapPin, Clock, Phone, Navigation } from "lucide-react";
 import { PageHero } from "@/components/site/PageHero";
 
 const STORES = [
-  { name: "PROMOFRAIS Houmt Souk", addr: "Av. Habib Bourguiba, Houmt Souk", phone: "+216 75 650 100", hours: "8h — 22h, 7j/7" },
-  { name: "PROMOFRAIS Midoun", addr: "Route Touristique, Midoun", phone: "+216 75 730 200", hours: "8h — 23h, 7j/7" },
-  { name: "PROMOFRAIS Aghir", addr: "Zone Aghir, Djerba", phone: "+216 75 758 300", hours: "9h — 21h, 7j/7" },
+  {
+    name: "PROMOFRAIS Houmt Souk",
+    addr: "Av. Habib Bourguiba, Houmt Souk",
+    phone: "+216 75 123 456",
+    hours: "8h — 22h, 7j/7",
+  },
 ];
 
 export const Route = createFileRoute("/stores")({
@@ -34,9 +37,15 @@ function StoresPage() {
             </div>
             <h3 className="font-display text-xl mb-3">{s.name}</h3>
             <ul className="space-y-2.5 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2"><MapPin className="h-4 w-4 mt-0.5 text-gold shrink-0" /> {s.addr}</li>
-              <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-gold" /> {s.phone}</li>
-              <li className="flex items-center gap-2"><Clock className="h-4 w-4 text-gold" /> {s.hours}</li>
+              <li className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 mt-0.5 text-gold shrink-0" /> {s.addr}
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-gold" /> {s.phone}
+              </li>
+              <li className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-gold" /> {s.hours}
+              </li>
             </ul>
             <a href="#" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gold">
               Itinéraire <Navigation className="h-4 w-4" />
