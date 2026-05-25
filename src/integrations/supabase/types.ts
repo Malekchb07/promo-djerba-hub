@@ -196,6 +196,30 @@ export type Database = {
         }
         Relationships: []
       }
+      lottery_draws: {
+        Row: {
+          competition_id: string
+          drawn_at: string
+          drawn_by: string | null
+          id: string
+          participant_id: string
+        }
+        Insert: {
+          competition_id: string
+          drawn_at?: string
+          drawn_by?: string | null
+          id?: string
+          participant_id: string
+        }
+        Update: {
+          competition_id?: string
+          drawn_at?: string
+          drawn_by?: string | null
+          id?: string
+          participant_id?: string
+        }
+        Relationships: []
+      }
       participants: {
         Row: {
           competition_id: string
