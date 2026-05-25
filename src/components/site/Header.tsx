@@ -1,7 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { Search, MapPin, Menu, X, Heart, User } from "lucide-react";
+import { Search, MapPin, Menu, X, Heart, User, LogOut, LayoutDashboard } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "./Logo";
+import { useAuth } from "@/hooks/use-auth";
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const NAV = [
   { to: "/", label: "Accueil" },
@@ -16,6 +21,9 @@ const NAV = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { user, isAdmin, signOut } = useAuth();
+  const initial = (user?.user_metadata?.full_name as string | undefined)?.trim()?.[0]
+    ?? user?.email?.[0]?.toUpperCase() ?? "";
   return (
     <header className="sticky top-0 z-50">
       <div className="bg-gradient-red text-primary-foreground text-xs">
@@ -49,12 +57,48 @@ export function Header() {
             <button className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40">
               <Heart className="h-4 w-4" />
             </button>
-            <Link
-              to="/login"
-              className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40"
-            >
-              <User className="h-4 w-4" />
-            </Link>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-gold/40 bg-gold/10 text-gold text-sm font-semibold transition-colors hover:bg-gold/20"
+                    aria-label="Mon compte"
+                  >
+                    {initial || <User className="h-4 w-4" />}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="truncate">
+                    {(user.user_metadata?.full_name as string | undefined) ?? user.email}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link to="/admin" className="flex items-center gap-2 cursor-pointer">
+                        <LayoutDashboard className="h-4 w-4" /> Espace admin
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem asChild>
+                    <Link to="/wheel" className="flex items-center gap-2 cursor-pointer">
+                      <User className="h-4 w-4" /> Ma roue
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => signOut()} className="cursor-pointer text-destructive focus:text-destructive">
+                    <LogOut className="h-4 w-4 mr-2" /> Se déconnecter
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link
+                to="/login"
+                className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40"
+                aria-label="Connexion"
+              >
+                <User className="h-4 w-4" />
+              </Link>
+            )}
             <button
               onClick={() => setOpen((o) => !o)}
               className="lg:hidden inline-grid h-10 w-10 place-items-center rounded-full border border-border"
@@ -77,6 +121,18 @@ export function Header() {
                   {n.label}
                 </Link>
               ))}
+              {user ? (
+                <button
+                  onClick={() => { signOut(); setOpen(false); }}
+                  className="px-2 py-3 text-left text-sm text-destructive"
+                >
+                  Se déconnecter
+                </button>
+              ) : (
+                <Link to="/login" onClick={() => setOpen(false)} className="px-2 py-3 text-sm text-gold">
+                  Connexion
+                </Link>
+              )}
             </nav>
           </div>
         )}
