@@ -66,9 +66,18 @@ export function FeaturedProducts() {
                   <div className="text-xs text-muted-foreground line-through">{p.old.toFixed(3)} DT</div>
                   <div className="font-display text-xl text-gold">{p.price.toFixed(3)} DT</div>
                 </div>
-                <button className="grid h-10 w-10 place-items-center rounded-full bg-gradient-red text-primary-foreground shadow-red transition-transform hover:scale-110">
+                <button
+                  type="button"
+                  onClick={() => {
+                    add({ id: p.name, name: p.name, price: p.price, image_url: p.img });
+                    toast.success(`${p.name} ajouté au panier`);
+                  }}
+                  className="grid h-10 w-10 place-items-center rounded-full bg-gradient-red text-primary-foreground shadow-red transition-transform hover:scale-110"
+                  aria-label="Ajouter au panier"
+                >
                   <ShoppingCart className="h-4 w-4" />
                 </button>
+
               </div>
             </div>
           </motion.article>
