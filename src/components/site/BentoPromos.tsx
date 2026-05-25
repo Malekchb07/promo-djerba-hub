@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+
+const MotionLink = motion(Link);
 import tech from "@/assets/promo-tech.jpg";
 import epicerie from "@/assets/promo-epicerie.jpg";
 import beaute from "@/assets/promo-beaute.jpg";
@@ -31,15 +34,15 @@ export function BentoPromos() {
             Promotions <span className="text-gold">premium</span>, soigneusement choisies.
           </h2>
         </div>
-        <a href="#" className="hidden md:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-gold">
+        <Link to="/promotions" className="hidden md:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-gold">
           Toutes les promos <ArrowUpRight className="h-4 w-4" />
-        </a>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-6 md:grid-rows-2 md:h-[640px]">
         {/* Hero promo */}
-        <motion.a
-          href="#"
+        <MotionLink
+          to="/promotions"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -62,10 +65,10 @@ export function BentoPromos() {
               Découvrir <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
             </span>
           </div>
-        </motion.a>
+        </MotionLink>
 
-        <motion.a
-          href="#"
+        <MotionLink
+          to="/promotions"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -81,10 +84,10 @@ export function BentoPromos() {
             <h3 className="font-display text-2xl mb-1">Saveurs de Djerba</h3>
             <p className="text-xs text-muted-foreground">Épices, dattes & huile locale</p>
           </div>
-        </motion.a>
+        </MotionLink>
 
-        <motion.a
-          href="#"
+        <MotionLink
+          to="/promotions"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -100,7 +103,7 @@ export function BentoPromos() {
             <h3 className="font-display text-2xl mb-1">Beauté & Parfums</h3>
             <p className="text-xs text-muted-foreground">Grandes marques sélectionnées</p>
           </div>
-        </motion.a>
+        </MotionLink>
       </div>
     </section>
   );
