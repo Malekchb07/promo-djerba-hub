@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Plus, Pencil, Trash2, Loader2, Trophy, Dices } from "lucide-react";
-import { listCompetitions, upsertCompetition, deleteCompetition, drawWinner } from "@/lib/admin.functions";
+import { Plus, Pencil, Trash2, Loader2, Trophy, Dices, Download } from "lucide-react";
+import { listCompetitions, upsertCompetition, deleteCompetition, drawWinner, exportWinners } from "@/lib/admin.functions";
 import { AdminShell, Field, inputCls, btnPrimary, btnGhost } from "@/components/admin/AdminShell";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { toast } from "sonner";
