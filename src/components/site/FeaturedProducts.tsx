@@ -42,10 +42,19 @@ export function FeaturedProducts() {
             <div className="relative aspect-square overflow-hidden bg-surface-2">
               <img src={p.img} alt={p.name} width={800} height={800} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
               <span className="absolute top-3 left-3 rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">{p.badge}</span>
-              <button className="absolute top-3 right-3 grid h-9 w-9 place-items-center rounded-full glass text-muted-foreground transition-colors hover:text-primary">
-                <Heart className="h-4 w-4" />
+              <button
+                type="button"
+                onClick={() => {
+                  const added = toggle({ id: p.name, name: p.name, price: p.price, image_url: p.img });
+                  toast.success(added ? "Ajouté aux favoris" : "Retiré des favoris");
+                }}
+                className={`absolute top-3 right-3 grid h-9 w-9 place-items-center rounded-full glass transition-colors ${has(p.name) ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+                aria-label="Favori"
+              >
+                <Heart className={`h-4 w-4 ${has(p.name) ? "fill-current" : ""}`} />
               </button>
             </div>
+
             <div className="p-5">
               <div className="mb-1 text-[10px] uppercase tracking-[0.2em] text-gold">{p.cat}</div>
               <h3 className="font-display text-base leading-tight mb-3 line-clamp-2 min-h-[2.5rem]">{p.name}</h3>
