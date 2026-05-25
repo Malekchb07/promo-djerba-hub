@@ -23,6 +23,8 @@ const NAV = [
 export function Header() {
   const [open, setOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
+  const { count: wishCount } = useWishlist();
+  const { count: cartCount } = useCart();
   const initial = (user?.user_metadata?.full_name as string | undefined)?.trim()?.[0]
     ?? user?.email?.[0]?.toUpperCase() ?? "";
   return (
