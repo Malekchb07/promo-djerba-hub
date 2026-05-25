@@ -62,14 +62,14 @@ export const claimCoupon = createServerFn({ method: "POST" })
   });
 
 export const listPublicCoupons = createServerFn({ method: "GET" }).handler(async () => {
-  const { createClient } = await import("@supabase/supabase-js");
-  const supa = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!);
-  const { data } = await supa
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data } = await supabaseAdmin
     .from("coupons")
-    .select("id,code,label,description,discount_percent,discount_amount,expires_at,min_purchase,usage_limit,used_count")
+    .select("id,label,description,discount_percent,discount_amount,expires_at,min_purchase,usage_limit,used_count")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
-  return { items: data ?? [] };
+  // Code is intentionally omitted; it is revealed only after a successful claim.
+  return { items: (data ?? []).map((c) => ({ ...c, code: "••••••" })) };
 });
 
 export const listMyRedemptions = createServerFn({ method: "GET" })
