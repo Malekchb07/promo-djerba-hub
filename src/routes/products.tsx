@@ -78,14 +78,14 @@ function ProductsPage() {
   useEffect(() => {
     const t = setTimeout(() => {
       if (qLocal !== search.q) {
-        navigate({ search: (p) => ({ ...p, q: qLocal, page: 1 }) });
+        navigate({ search: (p: any) => ({ ...p, q: qLocal, page: 1 }) });
       }
     }, 300);
     return () => clearTimeout(t);
   }, [qLocal]);
 
   const update = (patch: Partial<z.infer<typeof searchSchema>>) =>
-    navigate({ search: (p) => ({ ...p, ...patch, page: patch.page ?? 1 }) });
+    navigate({ search: (p: any) => ({ ...p, ...patch, page: patch.page ?? 1 }) });
 
   const reset = () =>
     navigate({ search: () => ({ q: "", category: "", sort: "newest", promoOnly: false, inStock: false, minPrice: 0, maxPrice: 0, page: 1 }) });
