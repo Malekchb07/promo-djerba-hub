@@ -38,6 +38,26 @@ function CompAdmin() {
       toast.success(`Gagnant tiré : ${winner.full_name} (${winner.email})`);
     } catch (e: any) { toast.error(e.message); }
   }
+  async function onExportWinners(competitionId: string, competitionTitle: string) {
+    try {
+      const { items: winners } = await exportW({ data: { competition_id: competitionId } });
+      if (!winners.length) { toast.info("Aucun gagnant pour ce concours."); return; }
+      const header = ["Nom", "Email", "Téléphone", "ID Participation", "Date d'inscription", "Concours"];
+      const rows = winners.map((w: any) => [
+        w.full_name,
+        w.email,
+        w.phone ?? "",
+        w.id,
+        new Date(w.created_at).toLocaleString("fr-FR"),
+        w.competitions?.title ?? competitionTitle,
+      ]);
+      const csv = [header, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a"); a.href = url; a.download = `gagnants-${competitionTitle.replace(/\s+/g, "_")}-${Date.now()}.csv`; a.click(); URL.revokeObjectURL(url);
+      toast.success(`${winners.length} gagnant(s) exporté(s).`);
+    } catch (e: any) { toast.error(e.message); }
+  }
 
   return (
     <AdminShell title="Concours" description="Créez et gérez vos jeux concours et tirages." actions={<button onClick={() => setEditing(blank())} className={btnPrimary}><Plus className="h-4 w-4" /> Nouveau</button>}>
