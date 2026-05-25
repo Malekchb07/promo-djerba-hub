@@ -13,6 +13,8 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/co
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
+import { toast } from "sonner";
+import { useCart, useWishlist } from "@/hooks/use-shop-store";
 import { listCatalog } from "@/lib/catalog.functions";
 import { cn } from "@/lib/utils";
 
