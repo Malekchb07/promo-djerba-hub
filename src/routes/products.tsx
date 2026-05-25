@@ -207,6 +207,16 @@ function ProductCard({ p, i }: { p: any; i: number }) {
   const discount = p.old_price && p.old_price > p.price ? Math.round(((p.old_price - p.price) / p.old_price) * 100) : null;
   const { add } = useCart();
   const { has, toggle } = useWishlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const requireAuth = () => {
+    if (!user) {
+      toast.error("Connectez-vous pour continuer");
+      navigate({ to: "/login" });
+      return false;
+    }
+    return true;
+  };
   const wished = has(p.id);
   return (
     <motion.article
