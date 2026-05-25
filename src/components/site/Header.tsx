@@ -22,7 +22,7 @@ export function Header() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2">
           <div className="flex items-center gap-2">
             <MapPin className="h-3.5 w-3.5" />
-            <span className="font-medium tracking-wide">PROMOFRAIS Djerba — Houmt Souk · Midoun · Aghir</span>
+            <span className="font-medium tracking-wide">PROMOFRAIS Djerba — Houmt Souk</span>
           </div>
           <div className="hidden sm:block opacity-90">Livraison & Click&Collect disponibles</div>
         </div>
@@ -49,7 +49,10 @@ export function Header() {
             <button className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40">
               <Heart className="h-4 w-4" />
             </button>
-            <Link to="/login" className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40">
+            <Link
+              to="/login"
+              className="hidden md:inline-grid h-10 w-10 place-items-center rounded-full border border-border text-muted-foreground transition-colors hover:text-gold hover:border-gold/40"
+            >
               <User className="h-4 w-4" />
             </Link>
             <button
