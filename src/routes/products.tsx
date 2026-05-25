@@ -251,6 +251,7 @@ function ProductCard({ p, i }: { p: any; i: number }) {
         <button
           type="button"
           onClick={() => {
+            if (!requireAuth()) return;
             const added = toggle({ id: p.id, name: p.name, price: Number(p.price), image_url: p.image_url });
             toast.success(added ? "Ajouté aux favoris" : "Retiré des favoris");
           }}
