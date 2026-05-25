@@ -23,6 +23,16 @@ const PRODUCTS = [
 export function FeaturedProducts() {
   const { add } = useCart();
   const { has, toggle } = useWishlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const requireAuth = () => {
+    if (!user) {
+      toast.error("Connectez-vous pour continuer");
+      navigate({ to: "/login" });
+      return false;
+    }
+    return true;
+  };
   return (
     <section className="mx-auto max-w-7xl px-4 py-20">
       <div className="mb-10 flex items-end justify-between">
