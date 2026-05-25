@@ -91,7 +91,6 @@ function LoginPage() {
             {loading && <Loader2 className="h-4 w-4 animate-spin" />}
             {mode === "signin" ? "Se connecter" : "Créer le compte"}
           </button>
-          </button>
         </form>
         <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
           <div className="h-px flex-1 bg-border" /> ou <div className="h-px flex-1 bg-border" />
