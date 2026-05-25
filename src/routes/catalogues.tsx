@@ -42,7 +42,7 @@ function CataloguesPage() {
                   </div>
                 </Link>
                 <div className="flex items-center justify-between p-4 text-xs">
-                  <a href={c.pdf_url} download className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground"><Download className="h-3 w-3" /> Télécharger</a>
+                  <a href={c.pdf_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-foreground"><Download className="h-3 w-3" /> Télécharger</a>
                   <Link to="/catalogues/$id" params={{ id: c.id }} className="inline-flex items-center gap-1 text-gold">Feuilleter <ArrowUpRight className="h-3 w-3" /></Link>
                 </div>
               </motion.div>
