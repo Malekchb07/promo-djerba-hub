@@ -13,6 +13,8 @@ import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/co
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
+import { toast } from "sonner";
+import { useCart, useWishlist } from "@/hooks/use-shop-store";
 import { listCatalog } from "@/lib/catalog.functions";
 import { cn } from "@/lib/utils";
 
@@ -202,6 +204,9 @@ function ProductsPage() {
 
 function ProductCard({ p, i }: { p: any; i: number }) {
   const discount = p.old_price && p.old_price > p.price ? Math.round(((p.old_price - p.price) / p.old_price) * 100) : null;
+  const { add } = useCart();
+  const { has, toggle } = useWishlist();
+  const wished = has(p.id);
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
@@ -232,8 +237,16 @@ function ProductCard({ p, i }: { p: any; i: number }) {
             Rupture
           </span>
         )}
-        <button className="absolute top-3 right-3 grid h-9 w-9 place-items-center rounded-full glass text-muted-foreground transition-colors hover:text-primary" aria-label="Favori">
-          <Heart className="h-4 w-4" />
+        <button
+          type="button"
+          onClick={() => {
+            const added = toggle({ id: p.id, name: p.name, price: Number(p.price), image_url: p.image_url });
+            toast.success(added ? "Ajouté aux favoris" : "Retiré des favoris");
+          }}
+          className={`absolute top-3 right-3 grid h-9 w-9 place-items-center rounded-full glass transition-colors ${wished ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+          aria-label="Favori"
+        >
+          <Heart className={`h-4 w-4 ${wished ? "fill-current" : ""}`} />
         </button>
       </div>
       <div className="p-3 sm:p-4">
@@ -249,9 +262,14 @@ function ProductCard({ p, i }: { p: any; i: number }) {
             <div className="font-display text-lg sm:text-xl text-gold">{Number(p.price).toFixed(3)} DT</div>
           </div>
           <button
+            type="button"
             disabled={p.stock === 0}
+            onClick={() => {
+              add({ id: p.id, name: p.name, price: Number(p.price), image_url: p.image_url });
+              toast.success(`${p.name} ajouté au panier`);
+            }}
             className="grid h-9 w-9 sm:h-10 sm:w-10 shrink-0 place-items-center rounded-full bg-gradient-red text-primary-foreground shadow-red transition-transform hover:scale-110 disabled:opacity-40 disabled:hover:scale-100"
-            aria-label="Ajouter"
+            aria-label="Ajouter au panier"
           >
             <ShoppingCart className="h-4 w-4" />
           </button>
@@ -260,6 +278,7 @@ function ProductCard({ p, i }: { p: any; i: number }) {
     </motion.article>
   );
 }
+
 
 function FiltersPanel({
   data,
