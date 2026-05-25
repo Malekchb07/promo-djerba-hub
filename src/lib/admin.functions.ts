@@ -191,6 +191,20 @@ export const listParticipants = createServerFn({ method: "GET" })
     return { items: data ?? [] };
   });
 
+export const exportWinners = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ competition_id: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: rows } = await context.supabase
+      .from("participants")
+      .select("id, full_name, email, phone, created_at, competitions(title)")
+      .eq("competition_id", data.competition_id)
+      .eq("is_winner", true)
+      .order("created_at", { ascending: true });
+    return { items: rows ?? [] };
+  });
+
 export const drawWinner = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d: unknown) => z.object({ competition_id: z.string().uuid() }).parse(d))
