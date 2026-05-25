@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Search, MapPin, Menu, X, Heart, User, LogOut, LayoutDashboard } from "lucide-react";
+import { Search, MapPin, Menu, X, Heart, User, LogOut, LayoutDashboard, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
+import { useCart, useWishlist } from "@/hooks/use-shop-store";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
