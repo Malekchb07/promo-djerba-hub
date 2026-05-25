@@ -65,10 +65,10 @@ export function BentoPromos() {
               Découvrir <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
             </span>
           </div>
-        </motion.a>
+        </MotionLink>
 
-        <motion.a
-          href="#"
+        <MotionLink
+          to="/promotions"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
