@@ -37,7 +37,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data.session?.user) loadRoles(data.session.user.id).finally(() => setIsLoading(false));
       else setIsLoading(false);
     });
-    return () => sub.subscription.unsubscribe();
+
+    // Déconnexion automatique à la fermeture de l'onglet/navigateur
+    const clearSession = () => {
+      try {
+        Object.keys(localStorage)
+          .filter((k) => k.startsWith("sb-") && k.endsWith("-auth-token"))
+          .forEach((k) => localStorage.removeItem(k));
+      } catch { /* noop */ }
+    };
+    window.addEventListener("pagehide", clearSession);
+
+    return () => {
+      sub.subscription.unsubscribe();
+      window.removeEventListener("pagehide", clearSession);
+    };
   }, []);
 
   async function loadRoles(userId: string) {
