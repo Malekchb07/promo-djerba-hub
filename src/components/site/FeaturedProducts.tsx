@@ -19,6 +19,8 @@ const PRODUCTS = [
 ];
 
 export function FeaturedProducts() {
+  const { add } = useCart();
+  const { has, toggle } = useWishlist();
   return (
     <section className="mx-auto max-w-7xl px-4 py-20">
       <div className="mb-10 flex items-end justify-between">
