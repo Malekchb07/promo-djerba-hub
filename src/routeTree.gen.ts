@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as WheelRouteImport } from './routes/wheel'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -29,6 +30,11 @@ import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCompetitionsRouteImport } from './routes/admin.competitions'
 import { Route as AdminCataloguesRouteImport } from './routes/admin.catalogues'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WheelRoute = WheelRouteImport.update({
   id: '/wheel',
   path: '/wheel',
@@ -137,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
   '/wheel': typeof WheelRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -157,6 +164,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
   '/wheel': typeof WheelRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -179,6 +187,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
   '/wheel': typeof WheelRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -202,6 +211,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stores'
     | '/wheel'
+    | '/wishlist'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stores'
     | '/wheel'
+    | '/wishlist'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stores'
     | '/wheel'
+    | '/wishlist'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
@@ -265,10 +277,18 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StoresRoute: typeof StoresRoute
   WheelRoute: typeof WheelRoute
+  WishlistRoute: typeof WishlistRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wheel': {
       id: '/wheel'
       path: '/wheel'
@@ -451,7 +471,18 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StoresRoute: StoresRoute,
   WheelRoute: WheelRoute,
+  WishlistRoute: WishlistRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
