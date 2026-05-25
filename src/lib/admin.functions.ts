@@ -207,7 +207,12 @@ export const exportWinners = createServerFn({ method: "POST" })
 
 export const drawWinner = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ competition_id: z.string().uuid() }).parse(d))
+  .inputValidator((d: unknown) =>
+    z.object({
+      competition_id: z.string().uuid(),
+      count: z.number().int().min(1).max(50).default(1),
+    }).parse(d),
+  )
   .handler(async ({ context, data }) => {
     await assertAdmin(context);
     const { data: parts } = await context.supabase
@@ -216,13 +221,71 @@ export const drawWinner = createServerFn({ method: "POST" })
       .eq("competition_id", data.competition_id)
       .eq("is_winner", false);
     if (!parts || parts.length === 0) throw new Error("Aucun participant éligible");
-    const winner = parts[Math.floor(Math.random() * parts.length)];
-    const { error } = await context.supabase
-      .from("participants")
-      .update({ is_winner: true })
-      .eq("id", winner.id);
+    const pool = [...parts];
+    const winners: any[] = [];
+    const n = Math.min(data.count, pool.length);
+    for (let i = 0; i < n; i++) {
+      const idx = Math.floor(Math.random() * pool.length);
+      winners.push(pool.splice(idx, 1)[0]);
+    }
+    const ids = winners.map((w) => w.id);
+    const { error } = await context.supabase.from("participants").update({ is_winner: true }).in("id", ids);
     if (error) throw new Error(error.message);
-    return { winner };
+    const { error: dErr } = await context.supabase.from("lottery_draws").insert(
+      winners.map((w) => ({ competition_id: data.competition_id, participant_id: w.id, drawn_by: context.userId })),
+    );
+    if (dErr) throw new Error(dErr.message);
+    return { winners };
+  });
+
+export const setWinner = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z.object({ participant_id: z.string().uuid(), is_winner: z.boolean() }).parse(d),
+  )
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: part, error } = await context.supabase
+      .from("participants")
+      .update({ is_winner: data.is_winner })
+      .eq("id", data.participant_id)
+      .select("id, competition_id")
+      .single();
+    if (error) throw new Error(error.message);
+    if (data.is_winner && part) {
+      await context.supabase.from("lottery_draws").insert({
+        competition_id: part.competition_id,
+        participant_id: part.id,
+        drawn_by: context.userId,
+      });
+    }
+    return { ok: true };
+  });
+
+export const listDraws = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ competition_id: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: rows } = await context.supabase
+      .from("lottery_draws")
+      .select("id, drawn_at, drawn_by, participants(id, full_name, email, phone)")
+      .eq("competition_id", data.competition_id)
+      .order("drawn_at", { ascending: false });
+    return { items: rows ?? [] };
+  });
+
+export const listEligibleParticipants = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ competition_id: z.string().uuid() }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: rows } = await context.supabase
+      .from("participants")
+      .select("id, full_name, email, phone, is_winner, created_at")
+      .eq("competition_id", data.competition_id)
+      .order("created_at", { ascending: false });
+    return { items: rows ?? [] };
   });
 
 /* ---------- CATALOGUES ---------- */
