@@ -55,10 +55,10 @@ function LoginPage() {
   async function signInWithGoogle() {
     setLoading(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/admin" });
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/" });
       if (result.error) throw new Error(result.error.message || "Erreur Google");
       if (result.redirected) return;
-      navigate({ to: "/admin" });
+      navigate({ to: "/" });
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Erreur");
       setLoading(false);
