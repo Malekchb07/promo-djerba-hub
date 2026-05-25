@@ -82,6 +82,7 @@ export function FeaturedProducts() {
                 <button
                   type="button"
                   onClick={() => {
+                    if (!requireAuth()) return;
                     add({ id: p.name, name: p.name, price: p.price, image_url: p.img });
                     toast.success(`${p.name} ajouté au panier`);
                   }}
