@@ -37,9 +37,13 @@ function WheelPage() {
     setBusy(true); setResult(null);
     try {
       const r = await spin({ data: {} });
-      // Stop pointer on the chosen sector: rotate so sector center aligns with top
-      const target = 360 * 6 + (360 - (r.index * sectorDeg + sectorDeg / 2));
-      setRotation((prev) => prev + target);
+      // Aligner le centre du secteur gagnant sous le pointeur (haut),
+      // en tenant compte de la rotation courante pour les spins suivants.
+      const targetAngle = (360 - (r.index * sectorDeg + sectorDeg / 2)) % 360;
+      const current = ((rotation % 360) + 360) % 360;
+      const delta = ((targetAngle - current) + 360) % 360;
+      const next = rotation + 360 * 6 + delta;
+      setRotation(next);
       setTimeout(() => {
         setResult({ label: r.label, winning: r.winning });
         if (r.winning) toast.success(`Vous avez gagné : ${r.label} !`);
@@ -48,7 +52,7 @@ function WheelPage() {
         setBusy(false);
       }, 4200);
     } catch (e: any) {
-      toast.error(e.message); setBusy(false);
+      toast.error(e?.message ?? "Erreur lors du tirage"); setBusy(false);
     }
   }
 
