@@ -27,9 +27,10 @@ function write<T>(key: string, value: T[]) {
 }
 
 function useStore(key: string) {
-  const [items, setItems] = useState<Item[]>(() => read<Item>(key));
+  const [items, setItems] = useState<Item[]>([]);
 
   useEffect(() => {
+    setItems(read<Item>(key));
     const handler = (e: Event) => {
       const detail = (e as CustomEvent).detail;
       if (!detail || detail.key === key) setItems(read<Item>(key));
