@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Plus, Pencil, Trash2, Loader2, Trophy, Dices } from "lucide-react";
-import { listCompetitions, upsertCompetition, deleteCompetition, drawWinner } from "@/lib/admin.functions";
+import { Plus, Pencil, Trash2, Loader2, Trophy, Dices, Download } from "lucide-react";
+import { listCompetitions, upsertCompetition, deleteCompetition, drawWinner, exportWinners } from "@/lib/admin.functions";
 import { AdminShell, Field, inputCls, btnPrimary, btnGhost } from "@/components/admin/AdminShell";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import { toast } from "sonner";
@@ -14,6 +14,7 @@ function CompAdmin() {
   const upsert = useServerFn(upsertCompetition);
   const del = useServerFn(deleteCompetition);
   const draw = useServerFn(drawWinner);
+  const exportW = useServerFn(exportWinners);
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<any | null>(null);
@@ -37,6 +38,26 @@ function CompAdmin() {
       toast.success(`Gagnant tiré : ${winner.full_name} (${winner.email})`);
     } catch (e: any) { toast.error(e.message); }
   }
+  async function onExportWinners(competitionId: string, competitionTitle: string) {
+    try {
+      const { items: winners } = await exportW({ data: { competition_id: competitionId } });
+      if (!winners.length) { toast.info("Aucun gagnant pour ce concours."); return; }
+      const header = ["Nom", "Email", "Téléphone", "ID Participation", "Date d'inscription", "Concours"];
+      const rows = winners.map((w: any) => [
+        w.full_name,
+        w.email,
+        w.phone ?? "",
+        w.id,
+        new Date(w.created_at).toLocaleString("fr-FR"),
+        w.competitions?.title ?? competitionTitle,
+      ]);
+      const csv = [header, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
+      const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a"); a.href = url; a.download = `gagnants-${competitionTitle.replace(/\s+/g, "_")}-${Date.now()}.csv`; a.click(); URL.revokeObjectURL(url);
+      toast.success(`${winners.length} gagnant(s) exporté(s).`);
+    } catch (e: any) { toast.error(e.message); }
+  }
 
   return (
     <AdminShell title="Concours" description="Créez et gérez vos jeux concours et tirages." actions={<button onClick={() => setEditing(blank())} className={btnPrimary}><Plus className="h-4 w-4" /> Nouveau</button>}>
@@ -54,8 +75,9 @@ function CompAdmin() {
                 <div className="mt-3 text-xs text-muted-foreground">
                   Du {new Date(c.starts_at).toLocaleDateString("fr-FR")} {c.ends_at && `au ${new Date(c.ends_at).toLocaleDateString("fr-FR")}`}
                 </div>
-                <div className="mt-4 flex justify-end gap-1">
+                <div className="mt-4 flex flex-wrap justify-end gap-2">
                   <button onClick={() => onDraw(c.id)} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-gold px-4 py-2 text-xs font-bold text-gold-foreground"><Dices className="h-3.5 w-3.5" /> Tirer un gagnant</button>
+                  <button onClick={() => onExportWinners(c.id, c.title)} className="inline-flex items-center gap-1.5 rounded-full border border-gold/30 px-3 py-2 text-xs font-medium hover:bg-gold/10"><Download className="h-3.5 w-3.5" /> Exporter gagnants</button>
                   <button onClick={() => setEditing(c)} className="inline-grid h-8 w-8 place-items-center rounded-lg hover:bg-surface-2"><Pencil className="h-4 w-4" /></button>
                   <button onClick={() => onDelete(c.id)} className="inline-grid h-8 w-8 place-items-center rounded-lg text-primary hover:bg-primary/10"><Trash2 className="h-4 w-4" /></button>
                 </div>
