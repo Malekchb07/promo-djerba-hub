@@ -127,9 +127,9 @@ function CataloguePage() {
               <Share2 className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Partager</span>
             </button>
-            <a href={item.pdf_url} download className="inline-flex items-center gap-2 rounded-full bg-gradient-gold px-4 py-2 text-xs font-bold text-gold-foreground">
+            <button onClick={downloadPdf} className="inline-flex items-center gap-2 rounded-full bg-gradient-gold px-4 py-2 text-xs font-bold text-gold-foreground hover:opacity-90 transition-opacity">
               <Download className="h-3.5 w-3.5" /> <span className="hidden sm:inline">Télécharger</span>
-            </a>
+            </button>
           </div>
         </div>
       </div>
