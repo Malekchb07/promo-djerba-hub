@@ -277,6 +277,7 @@ function ProductCard({ p, i }: { p: any; i: number }) {
             type="button"
             disabled={p.stock === 0}
             onClick={() => {
+              if (!requireAuth()) return;
               add({ id: p.id, name: p.name, price: Number(p.price), image_url: p.image_url });
               toast.success(`${p.name} ajouté au panier`);
             }}
