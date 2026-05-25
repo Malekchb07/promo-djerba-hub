@@ -19,6 +19,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as CouponsRouteImport } from './routes/coupons'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CataloguesRouteImport } from './routes/catalogues'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -80,6 +81,11 @@ const CataloguesRoute = CataloguesRouteImport.update({
   path: '/catalogues',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -134,6 +140,7 @@ const AdminCataloguesRoute = AdminCataloguesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
   '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cart': typeof CartRoute
   '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
   '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
@@ -202,6 +211,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/cart'
     | '/catalogues'
     | '/contact'
     | '/coupons'
@@ -223,6 +233,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cart'
     | '/catalogues'
     | '/contact'
     | '/coupons'
@@ -245,6 +256,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/cart'
     | '/catalogues'
     | '/contact'
     | '/coupons'
@@ -268,6 +280,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  CartRoute: typeof CartRoute
   CataloguesRoute: typeof CataloguesRouteWithChildren
   ContactRoute: typeof ContactRoute
   CouponsRoute: typeof CouponsRoute
@@ -350,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/catalogues'
       fullPath: '/catalogues'
       preLoaderRoute: typeof CataloguesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -462,6 +482,7 @@ const CataloguesRouteWithChildren = CataloguesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  CartRoute: CartRoute,
   CataloguesRoute: CataloguesRouteWithChildren,
   ContactRoute: ContactRoute,
   CouponsRoute: CouponsRoute,
