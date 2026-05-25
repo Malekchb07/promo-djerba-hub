@@ -84,10 +84,10 @@ export function BentoPromos() {
             <h3 className="font-display text-2xl mb-1">Saveurs de Djerba</h3>
             <p className="text-xs text-muted-foreground">Épices, dattes & huile locale</p>
           </div>
-        </motion.a>
+        </MotionLink>
 
-        <motion.a
-          href="#"
+        <MotionLink
+          to="/promotions"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
