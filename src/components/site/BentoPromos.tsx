@@ -41,8 +41,8 @@ export function BentoPromos() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-6 md:grid-rows-2 md:h-[640px]">
         {/* Hero promo */}
-        <motion.a
-          href="#"
+        <MotionLink
+          to="/promotions"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
