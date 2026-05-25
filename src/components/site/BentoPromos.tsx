@@ -34,9 +34,9 @@ export function BentoPromos() {
             Promotions <span className="text-gold">premium</span>, soigneusement choisies.
           </h2>
         </div>
-        <a href="#" className="hidden md:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-gold">
+        <Link to="/promotions" className="hidden md:inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-gold">
           Toutes les promos <ArrowUpRight className="h-4 w-4" />
-        </a>
+        </Link>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-6 md:grid-rows-2 md:h-[640px]">
