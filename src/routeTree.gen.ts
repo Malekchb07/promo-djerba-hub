@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as WheelRouteImport } from './routes/wheel'
 import { Route as StoresRouteImport } from './routes/stores'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -18,6 +19,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as CouponsRouteImport } from './routes/coupons'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CataloguesRouteImport } from './routes/catalogues'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
@@ -29,6 +31,11 @@ import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminCompetitionsRouteImport } from './routes/admin.competitions'
 import { Route as AdminCataloguesRouteImport } from './routes/admin.catalogues'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WheelRoute = WheelRouteImport.update({
   id: '/wheel',
   path: '/wheel',
@@ -72,6 +79,11 @@ const ContactRoute = ContactRouteImport.update({
 const CataloguesRoute = CataloguesRouteImport.update({
   id: '/catalogues',
   path: '/catalogues',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminRoute = AdminRouteImport.update({
@@ -128,6 +140,7 @@ const AdminCataloguesRoute = AdminCataloguesRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
   '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
@@ -137,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
   '/wheel': typeof WheelRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -148,6 +162,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cart': typeof CartRoute
   '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
@@ -157,6 +172,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
   '/wheel': typeof WheelRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -170,6 +186,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
   '/catalogues': typeof CataloguesRouteWithChildren
   '/contact': typeof ContactRoute
   '/coupons': typeof CouponsRoute
@@ -179,6 +196,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stores': typeof StoresRoute
   '/wheel': typeof WheelRoute
+  '/wishlist': typeof WishlistRoute
   '/admin/catalogues': typeof AdminCataloguesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/coupons': typeof AdminCouponsRoute
@@ -193,6 +211,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/cart'
     | '/catalogues'
     | '/contact'
     | '/coupons'
@@ -202,6 +221,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stores'
     | '/wheel'
+    | '/wishlist'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
@@ -213,6 +233,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cart'
     | '/catalogues'
     | '/contact'
     | '/coupons'
@@ -222,6 +243,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stores'
     | '/wheel'
+    | '/wishlist'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
@@ -234,6 +256,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/cart'
     | '/catalogues'
     | '/contact'
     | '/coupons'
@@ -243,6 +266,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stores'
     | '/wheel'
+    | '/wishlist'
     | '/admin/catalogues'
     | '/admin/competitions'
     | '/admin/coupons'
@@ -256,6 +280,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  CartRoute: typeof CartRoute
   CataloguesRoute: typeof CataloguesRouteWithChildren
   ContactRoute: typeof ContactRoute
   CouponsRoute: typeof CouponsRoute
@@ -265,10 +290,18 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StoresRoute: typeof StoresRoute
   WheelRoute: typeof WheelRoute
+  WishlistRoute: typeof WishlistRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wheel': {
       id: '/wheel'
       path: '/wheel'
@@ -330,6 +363,13 @@ declare module '@tanstack/react-router' {
       path: '/catalogues'
       fullPath: '/catalogues'
       preLoaderRoute: typeof CataloguesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin': {
@@ -442,6 +482,7 @@ const CataloguesRouteWithChildren = CataloguesRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  CartRoute: CartRoute,
   CataloguesRoute: CataloguesRouteWithChildren,
   ContactRoute: ContactRoute,
   CouponsRoute: CouponsRoute,
@@ -451,6 +492,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StoresRoute: StoresRoute,
   WheelRoute: WheelRoute,
+  WishlistRoute: WishlistRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "@tanstack/react-router";
 import { useCart, useWishlist } from "@/hooks/use-shop-store";
+import { useAuth } from "@/hooks/use-auth";
 import fruits from "@/assets/cat-fruits.jpg";
 import alim from "@/assets/cat-alimentaire.jpg";
 import maison from "@/assets/cat-maison.jpg";
@@ -21,6 +23,16 @@ const PRODUCTS = [
 export function FeaturedProducts() {
   const { add } = useCart();
   const { has, toggle } = useWishlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const requireAuth = () => {
+    if (!user) {
+      toast.error("Connectez-vous pour continuer");
+      navigate({ to: "/login" });
+      return false;
+    }
+    return true;
+  };
   return (
     <section className="mx-auto max-w-7xl px-4 py-20">
       <div className="mb-10 flex items-end justify-between">
@@ -45,6 +57,7 @@ export function FeaturedProducts() {
               <button
                 type="button"
                 onClick={() => {
+                  if (!requireAuth()) return;
                   const added = toggle({ id: p.name, name: p.name, price: p.price, image_url: p.img });
                   toast.success(added ? "Ajouté aux favoris" : "Retiré des favoris");
                 }}
@@ -69,6 +82,7 @@ export function FeaturedProducts() {
                 <button
                   type="button"
                   onClick={() => {
+                    if (!requireAuth()) return;
                     add({ id: p.name, name: p.name, price: p.price, image_url: p.img });
                     toast.success(`${p.name} ajouté au panier`);
                   }}

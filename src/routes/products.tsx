@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { useCart, useWishlist } from "@/hooks/use-shop-store";
+import { useAuth } from "@/hooks/use-auth";
 import { listCatalog } from "@/lib/catalog.functions";
 import { cn } from "@/lib/utils";
 
@@ -206,6 +207,16 @@ function ProductCard({ p, i }: { p: any; i: number }) {
   const discount = p.old_price && p.old_price > p.price ? Math.round(((p.old_price - p.price) / p.old_price) * 100) : null;
   const { add } = useCart();
   const { has, toggle } = useWishlist();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const requireAuth = () => {
+    if (!user) {
+      toast.error("Connectez-vous pour continuer");
+      navigate({ to: "/login" });
+      return false;
+    }
+    return true;
+  };
   const wished = has(p.id);
   return (
     <motion.article
@@ -240,6 +251,7 @@ function ProductCard({ p, i }: { p: any; i: number }) {
         <button
           type="button"
           onClick={() => {
+            if (!requireAuth()) return;
             const added = toggle({ id: p.id, name: p.name, price: Number(p.price), image_url: p.image_url });
             toast.success(added ? "Ajouté aux favoris" : "Retiré des favoris");
           }}
@@ -265,6 +277,7 @@ function ProductCard({ p, i }: { p: any; i: number }) {
             type="button"
             disabled={p.stock === 0}
             onClick={() => {
+              if (!requireAuth()) return;
               add({ id: p.id, name: p.name, price: Number(p.price), image_url: p.image_url });
               toast.success(`${p.name} ajouté au panier`);
             }}
