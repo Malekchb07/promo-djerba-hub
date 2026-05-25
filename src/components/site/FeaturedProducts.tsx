@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Heart, ShoppingCart, Star } from "lucide-react";
+import { toast } from "sonner";
+import { useCart, useWishlist } from "@/hooks/use-shop-store";
 import fruits from "@/assets/cat-fruits.jpg";
 import alim from "@/assets/cat-alimentaire.jpg";
 import maison from "@/assets/cat-maison.jpg";
