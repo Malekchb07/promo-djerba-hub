@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { useCart, useWishlist } from "@/hooks/use-shop-store";
+import { useAuth } from "@/hooks/use-auth";
 import { listCatalog } from "@/lib/catalog.functions";
 import { cn } from "@/lib/utils";
 
