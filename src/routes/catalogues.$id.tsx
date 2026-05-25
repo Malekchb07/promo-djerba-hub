@@ -83,6 +83,31 @@ function CataloguePage() {
     copyLink();
   }
 
+  async function downloadPdf() {
+    if (!item.pdf_url) {
+      toast.error("PDF indisponible");
+      return;
+    }
+    try {
+      toast.loading("Téléchargement…", { id: "dl" });
+      const res = await fetch(item.pdf_url);
+      if (!res.ok) throw new Error("Téléchargement impossible");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${item.title.replace(/[^a-z0-9-_ ]/gi, "_")}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast.success("Téléchargement lancé", { id: "dl" });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erreur de téléchargement", { id: "dl" });
+      window.open(item.pdf_url, "_blank", "noopener,noreferrer");
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b border-border bg-surface/60 backdrop-blur sticky top-0 z-10">
