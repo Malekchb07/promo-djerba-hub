@@ -17,11 +17,8 @@ export const claimCoupon = createServerFn({ method: "POST" })
     if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) {
       throw new Error("Coupon expiré");
     }
-    if (coupon.usage_limit && coupon.used_count >= coupon.usage_limit) {
-      throw new Error("Quota atteint");
-    }
 
-    // Check if user already claimed
+    // 1 claim par utilisateur — si déjà récupéré, renvoyer le QR existant
     const { data: existing } = await supabase
       .from("coupon_redemptions")
       .select("id")
@@ -29,41 +26,62 @@ export const claimCoupon = createServerFn({ method: "POST" })
       .eq("user_id", userId)
       .maybeSingle();
 
-    let redemptionId = existing?.id;
-    if (!existing) {
-      const { data: ins, error } = await supabase
-        .from("coupon_redemptions")
-        .insert({ coupon_id: data.coupon_id, user_id: userId })
-        .select("id")
-        .single();
-      if (error) throw new Error(error.message);
-      redemptionId = ins.id;
-      await supabase
-        .from("coupons")
-        .update({ used_count: (coupon.used_count ?? 0) + 1 })
-        .eq("id", data.coupon_id);
+    if (existing) {
+      return {
+        redemptionId: existing.id,
+        code: coupon.code,
+        label: coupon.label,
+        alreadyClaimed: true,
+        qrPayload: `PROMOFRAIS|${coupon.code}|${existing.id}|${userId}`,
+      };
     }
 
+    if (coupon.usage_limit && coupon.used_count >= coupon.usage_limit) {
+      throw new Error("Quota de coupons atteint");
+    }
+
+    const { data: ins, error } = await supabase
+      .from("coupon_redemptions")
+      .insert({ coupon_id: data.coupon_id, user_id: userId })
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+
+    await supabase
+      .from("coupons")
+      .update({ used_count: (coupon.used_count ?? 0) + 1 })
+      .eq("id", data.coupon_id);
+
     return {
-      redemptionId,
+      redemptionId: ins.id,
       code: coupon.code,
       label: coupon.label,
-      // QR payload — scannable at the till
-      qrPayload: `PROMOFRAIS|${coupon.code}|${redemptionId}|${userId}`,
+      alreadyClaimed: false,
+      qrPayload: `PROMOFRAIS|${coupon.code}|${ins.id}|${userId}`,
     };
   });
 
 export const listPublicCoupons = createServerFn({ method: "GET" }).handler(async () => {
-  // Uses anon RLS; public read of active coupons
   const { createClient } = await import("@supabase/supabase-js");
   const supa = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!);
   const { data } = await supa
     .from("coupons")
-    .select("id,code,label,description,discount_percent,discount_amount,expires_at,min_purchase")
+    .select("id,code,label,description,discount_percent,discount_amount,expires_at,min_purchase,usage_limit,used_count")
     .eq("is_active", true)
     .order("created_at", { ascending: false });
   return { items: data ?? [] };
 });
+
+export const listMyRedemptions = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { data } = await supabase
+      .from("coupon_redemptions")
+      .select("id,coupon_id,redeemed_at")
+      .eq("user_id", userId);
+    return { items: data ?? [] };
+  });
 
 export const listPublicCatalogues = createServerFn({ method: "GET" }).handler(async () => {
   const { createClient } = await import("@supabase/supabase-js");
