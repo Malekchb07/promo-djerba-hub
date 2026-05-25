@@ -57,6 +57,7 @@ export function FeaturedProducts() {
               <button
                 type="button"
                 onClick={() => {
+                  if (!requireAuth()) return;
                   const added = toggle({ id: p.name, name: p.name, price: p.price, image_url: p.img });
                   toast.success(added ? "Ajouté aux favoris" : "Retiré des favoris");
                 }}
