@@ -46,6 +46,19 @@ function LoginPage() {
       setLoading(false);
     }
   }
+  async function signInWithGoogle() {
+    setLoading(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/admin" });
+      if (result.error) throw new Error(result.error.message || "Erreur Google");
+      if (result.redirected) return;
+      navigate({ to: "/admin" });
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Erreur");
+      setLoading(false);
+    }
+  }
+
 
   return (
     <div className="min-h-[calc(100vh-8rem)] grid place-items-center px-4 py-16 bg-gradient-hero relative">
