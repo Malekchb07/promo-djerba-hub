@@ -14,6 +14,7 @@ function CompAdmin() {
   const upsert = useServerFn(upsertCompetition);
   const del = useServerFn(deleteCompetition);
   const draw = useServerFn(drawWinner);
+  const exportW = useServerFn(exportWinners);
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<any | null>(null);
