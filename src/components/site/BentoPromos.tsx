@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Clock } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+
+const MotionLink = motion(Link);
 import tech from "@/assets/promo-tech.jpg";
 import epicerie from "@/assets/promo-epicerie.jpg";
 import beaute from "@/assets/promo-beaute.jpg";
