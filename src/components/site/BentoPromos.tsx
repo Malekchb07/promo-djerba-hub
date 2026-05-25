@@ -103,7 +103,7 @@ export function BentoPromos() {
             <h3 className="font-display text-2xl mb-1">Beauté & Parfums</h3>
             <p className="text-xs text-muted-foreground">Grandes marques sélectionnées</p>
           </div>
-        </motion.a>
+        </MotionLink>
       </div>
     </section>
   );
