@@ -34,10 +34,16 @@ function LoginPage() {
         if (error) throw error;
         toast.success("Compte créé. Vérifiez votre email pour confirmer.");
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Connecté");
-        navigate({ to: "/admin" });
+        const uid = data.user?.id;
+        let isAdmin = false;
+        if (uid) {
+          const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", uid);
+          isAdmin = (roles ?? []).some((r) => r.role === "admin");
+        }
+        navigate({ to: isAdmin ? "/admin" : "/" });
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Erreur";
@@ -49,10 +55,10 @@ function LoginPage() {
   async function signInWithGoogle() {
     setLoading(true);
     try {
-      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/admin" });
+      const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/" });
       if (result.error) throw new Error(result.error.message || "Erreur Google");
       if (result.redirected) return;
-      navigate({ to: "/admin" });
+      navigate({ to: "/" });
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Erreur");
       setLoading(false);
