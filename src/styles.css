@@ -141,5 +141,4 @@
   }
 }
 
-/* Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&family=Hind:wght@300;400;500;600;700&display=swap");
+/* Fonts are loaded via <link> in src/routes/__root.tsx */
