@@ -73,7 +73,7 @@ function ProductsAdmin() {
                   </td>
                   <td className="p-3 text-center">{p.stock}</td>
                   <td className="p-3 text-center"><span className={`text-xs ${p.is_active ? "text-emerald-400" : "text-muted-foreground"}`}>{p.is_active ? "Actif" : "Inactif"}</span></td>
-                  <td className="p-3 text-right">
+                  <td className="p-3 text-right" onClick={(e) => e.stopPropagation()}>
                     <button onClick={() => setEditing(p)} className="mr-1 inline-grid h-8 w-8 place-items-center rounded-lg hover:bg-surface-2"><Pencil className="h-4 w-4" /></button>
                     <button onClick={() => onDelete(p.id)} className="inline-grid h-8 w-8 place-items-center rounded-lg text-primary hover:bg-primary/10"><Trash2 className="h-4 w-4" /></button>
                   </td>
