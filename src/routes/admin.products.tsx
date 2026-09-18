@@ -57,7 +57,7 @@ function ProductsAdmin() {
             </thead>
             <tbody>
               {items.map((p) => (
-                <tr key={p.id} className="border-t border-border">
+                <tr key={p.id} onClick={() => setEditing(p)} className="border-t border-border cursor-pointer hover:bg-surface-2/50">
                   <td className="p-3">
                     <div className="flex items-center gap-3">
                       {p.image_url && <img src={p.image_url} alt="" className="h-10 w-10 rounded-lg object-cover" />}
