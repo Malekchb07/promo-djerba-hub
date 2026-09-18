@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Logo } from "./Logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useCart, useWishlist } from "@/hooks/use-shop-store";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
@@ -39,8 +41,8 @@ export function Header() {
         </div>
       </div>
       <div className="border-b border-border bg-background/85 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4">
-          <Logo />
+        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 lg:flex lg:gap-6">
+          <div className="min-w-0"><Logo /></div>
           <nav className="hidden lg:flex items-center gap-1">
             {NAV.map((n) => (
               <Link
@@ -123,43 +125,76 @@ export function Header() {
                 <User className="h-4 w-4" />
               </Link>
             )}
-            <button
-              onClick={() => setOpen((o) => !o)}
-              className="lg:hidden inline-grid h-10 w-10 place-items-center rounded-full border border-border"
-              aria-label="Menu"
-            >
-              {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </button>
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="h-10 w-10 shrink-0 rounded-full lg:hidden"
+                  aria-label="Ouvrir le menu"
+                  aria-expanded={open}
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="z-[70] flex w-[min(88vw,22rem)] flex-col overflow-y-auto border-border bg-background p-0">
+                <SheetHeader className="border-b border-border px-5 py-5 text-left">
+                  <SheetTitle><Logo /></SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-1 flex-col px-4 py-3" aria-label="Navigation mobile">
+                  {NAV.map((n) => (
+                    <SheetClose asChild key={n.to}>
+                      <Link
+                        to={n.to}
+                        className="border-b border-border/60 px-2 py-3.5 text-base text-foreground/80 transition-colors hover:text-gold"
+                      >
+                        {n.label}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                  <SheetClose asChild>
+                    <Link to="/wishlist" className="flex items-center justify-between border-b border-border/60 px-2 py-3.5 text-base text-foreground/80">
+                      <span className="flex items-center gap-3"><Heart className="h-4 w-4" /> Mes favoris</span>
+                      {wishCount > 0 && <span className="text-sm font-semibold text-gold">{wishCount}</span>}
+                    </Link>
+                  </SheetClose>
+                  <SheetClose asChild>
+                    <Link to="/cart" className="flex items-center justify-between border-b border-border/60 px-2 py-3.5 text-base text-foreground/80">
+                      <span className="flex items-center gap-3"><ShoppingCart className="h-4 w-4" /> Mon panier</span>
+                      {cartCount > 0 && <span className="text-sm font-semibold text-gold">{cartCount}</span>}
+                    </Link>
+                  </SheetClose>
+                  {isAdmin && (
+                    <SheetClose asChild>
+                      <Link to="/admin" className="flex items-center gap-3 border-b border-border/60 px-2 py-3.5 text-base text-gold">
+                        <LayoutDashboard className="h-4 w-4" /> Espace admin
+                      </Link>
+                    </SheetClose>
+                  )}
+                  {user ? (
+                    <SheetClose asChild>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={() => signOut()}
+                        className="mt-3 h-11 justify-start px-2 text-destructive hover:text-destructive"
+                      >
+                        <LogOut className="h-4 w-4" /> Se déconnecter
+                      </Button>
+                    </SheetClose>
+                  ) : (
+                    <SheetClose asChild>
+                      <Link to="/login" className="mt-3 flex h-11 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primary-foreground">
+                        Connexion
+                      </Link>
+                    </SheetClose>
+                  )}
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
-        {open && (
-          <div className="lg:hidden border-t border-border bg-background">
-            <nav className="mx-auto flex max-w-7xl flex-col px-4 py-3">
-              {NAV.map((n) => (
-                <Link
-                  key={n.to}
-                  to={n.to}
-                  onClick={() => setOpen(false)}
-                  className="px-2 py-3 text-sm text-foreground/80 hover:text-gold"
-                >
-                  {n.label}
-                </Link>
-              ))}
-              {user ? (
-                <button
-                  onClick={() => { signOut(); setOpen(false); }}
-                  className="px-2 py-3 text-left text-sm text-destructive"
-                >
-                  Se déconnecter
-                </button>
-              ) : (
-                <Link to="/login" onClick={() => setOpen(false)} className="px-2 py-3 text-sm text-gold">
-                  Connexion
-                </Link>
-              )}
-            </nav>
-          </div>
-        )}
       </div>
     </header>
   );
